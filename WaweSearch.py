@@ -1,6 +1,7 @@
 class Vertex():
     def __init__(self,name):
         self.name=name
+        self.visite=1
     def __str__(self):
         return self.name
     visite=1
@@ -25,21 +26,31 @@ class Graph():
             if a.From.name==vertex.name:
                 result.append(a.To)
         return result
-        
+    def SetVisite(self):
+        for e in self.EdgeList:
+            e.From.visite=1
+            e.To.visite=1
+         
     def WaweSearch(self,start,finish):
-        #Recursion Key
+        self.SetVisite()
+        
+        #Check 
         if start.name==finish.name:
-            print("True)")
+            return True
+        
+        #Main
         curVertex=self.GetVertex(start)
-        for a in curVertex:
-            #Do recursion if vertex dont visited
-            if a.visite==1:
-                a.visite=0
-                self.WaweSearch(a,finish)
+        for v in curVertex:
+            if v.name==finish.name:
+                return True
+            elif v.visite==1:
+                v.visite=0
+                curVertex.extend(self.GetVertex(v))
+        return False
         
 #Realisation Graph   
 graph=Graph()
-for a in range(1,8):
+for a in range(1,9):
     graph.AddVertex(a)
 graph.AddEdge(Vertex(1),Vertex(2))
 graph.AddEdge(Vertex(1),Vertex(3))
@@ -48,7 +59,8 @@ graph.AddEdge(Vertex(4),Vertex(5))
 graph.AddEdge(Vertex(4),Vertex(6))
 graph.AddEdge(Vertex(6),Vertex(4))
 graph.AddEdge(Vertex(5),Vertex(7))
-graph.WaweSearch(Vertex(4),Vertex(7))
+print(graph.WaweSearch(Vertex(4),Vertex(7)))#True
+print(graph.WaweSearch(Vertex(1),Vertex(8)))#False
 
 
 
